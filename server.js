@@ -120,11 +120,11 @@ app.use(passport.initialize());
 app.use(passport.session()); 
 
 
-app.get('/login', (req, res) => {
-    res.render('login.ejs');
+app.get('/signin', (req, res) => {
+    res.render('signin.ejs');
 });
 
-app.post('/login', passport.authenticate('local', {
+app.post('/signin', passport.authenticate('local', {
     failureRedirect : '/fail'
 }), (req, res) => {
     res.redirect('/');
@@ -182,4 +182,9 @@ passport.deserializeUser((id, done) => {
 
 app.get('/signup', (req, res) => {
     res.render('signup.ejs');
+});
+
+
+app.post('/signup', (req, res) => {
+    
 });
