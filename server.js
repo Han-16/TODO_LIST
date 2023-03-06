@@ -193,7 +193,7 @@ passport.deserializeUser((id, done) => {
     });
     
 })
-
+  
 app.get('/signup', (req, res) => {
     res.render('signup.ejs');
 });
