@@ -4,7 +4,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
@@ -36,26 +36,81 @@
 
   <div class="container mt-4">
     <h4 class="text-center">상세페이지</h4>
-
+    <!-- <input type="button" value="뒤로가기"  onclick="history.back();"/> -->
+    
 
     <div class="card" style="width: 100%;">
         <div class="card-body">
+          <input style = "display : none;" value = "<%= data._id %>" id="num_"></input>
           <h5 class="card-title"><%= data.task %></h5>
           <h6 class="card-subtitle mb-2 text-muted"><%= data.date %></h6>
           <p class="card-text"><%= data.content %></p>
           
-          <a href="/edit/<%= data._id %>" class="card-link">수정</a>
-          <a href="#" class="card-link">삭제</a>
+          <!--  -->
+          <button href="/edit/<%= data._id %>" class="btn btn-daner"><a href="/edit/<%= data._id %>" class="card-link edit" id = "edit">수정</a></button>
+          
+          
+          <button type="button" class="btn btn-daner" data-toggle="modal" data-target="#exampleModal">
+            삭제
+          </button>
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">TODO</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  삭제하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button class="btn btn-primary delete_detail">Delete</button>
+                  
+                 
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
     </div>
 
+    <script>
+
+      
+      
+      $(".delete_detail").click(function(e){
+        // let num_of_post = data._id;
+        // console.log(num_of_post);
+        console.log(e);
+        var num_of_post = $('#num_').val();
+        console.log(num_of_post);
+        
+        $.ajax({
+          method : "DELETE",
+          url : "/delete_detail",
+          data : { _id : num_of_post }
+        }).done(function(result){
+          console.log("디테일페이지에서 삭제 완료.");
+          alert("삭제됐어욤");
+          window.location.href = '/list'; 
+          
+        }).fail(() => {
+
+        });
+        
+      })
+    </script>
 
 
 
 
-
+  
 
       
      

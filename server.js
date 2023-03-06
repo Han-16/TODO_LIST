@@ -30,14 +30,15 @@ MongoClient.connect(process.env.DB_URL, function(err, client){
     });
 
     app.post('/add', (req, res) => {
-        res.redirect('/write');
+        
         db.collection('counter').findOne({name : "게시물 갯수"}, (err, result) => {
-            console.log("number of post : ", result.totalPost)
+            console.log("number of post : ", result.totalPost + 1)
             var total_post = result.totalPost;
             db.collection('post').insertOne( { _id : total_post + 1, task : req.body.task, date : req.body.date, content : req.body.content}, function(err, result){
-                console.log("저장 완료!");
+                console.log("Write Done!");
                 db.collection('counter').updateOne({name : '게시물 갯수'}, { $inc : {totalPost : 1} }, (err, result) => {
                     if (err) return console.log(err);
+                    res.redirect('/list');
                 })
             });
         
@@ -67,6 +68,19 @@ MongoClient.connect(process.env.DB_URL, function(err, client){
         });
     });
      
+
+    app.delete('/delete_detail', (req, res) => {
+        console.log("글 번호 : ", req.body._id);
+        req.body._id = parseInt(req.body._id);
+        db.collection('post').deleteOne(req.body, (err, result) => {
+            if (err) return console.log(err);
+            console.log("삭제완료!");
+            res.status(200).send();
+        });
+        
+    })
+
+    
 
     app.get('/detail/:id', function(req, res) {
         db.collection('post').findOne({ _id : parseInt(req.params.id) }, function(err, result) {
@@ -100,7 +114,9 @@ MongoClient.connect(process.env.DB_URL, function(err, client){
 
     app.put('/edit', function(req, res) {
     //     // 수정요청이 온 데이터를 받음. db에서 해당하는 글번호와 같은 데이터를 수정요청이 온 데이터로 변경함.
-        db.collection('post').updateOne({ _id : parseInt(req.body._id) }, { $set : { task : req.body.task, date : req.body.date, content : req.body.content } }, function(err, result){
+        db.collection('post').updateOne({ _id : parseInt(req.body.id) }, 
+        { $set : { task : req.body.task, date : req.body.date, content : req.body.content } }, 
+        function(err, result){
             console.log("수정 완료");
             // alert("수정완료!")
             res.redirect('/list');
@@ -167,8 +183,6 @@ passport.use(new LocalStrategy({
 }));
 
 
-
-
 passport.serializeUser((user, done) => {
     done(null, user.id); 
 });
@@ -186,5 +200,25 @@ app.get('/signup', (req, res) => {
 
 
 app.post('/signup', (req, res) => {
-    
+    console.log(req.body);
+    db.collection('login').findOne({ id : req.body.id }, (err, result) => {
+        if (err) return console.log(err);
+        if (result) {
+            console.log("이미 있는 ID입니다.");
+            // console.log(result);
+            // alert("이미 있는 ID입니다!");
+            res.render("signup.ejs");
+        } else{
+            
+        }
+    });
+});
+
+
+app.get('/search', (req, res) => {
+    console.log(req.query.value);
+    db.collection('post').find({ task : req.query.value }).toArray((err, result) => {
+        if (err) return console.log(err);
+        console.log(result);
+    });
 });

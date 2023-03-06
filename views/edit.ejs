@@ -42,7 +42,7 @@
         <form action="/edit?_method=PUT" method = "POST">
           <div class="form-group">
             <label>오늘의 할일</label>
-            <input type="text" value = "<%= data._id %>" name="_id" style="display : none;">
+            <input type="text" value = "<%= data._id %>" name="id" style="display : none;">
             <input type="text" class="form-control" name = "task" value="<%= data.task %>">
           </div>
           <div class="form-group">
@@ -77,12 +77,19 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Edit</button>
+        <button type="submit" class="btn btn-primary edit">Edit</button>
       </div>
     </div>
   </div>
 </div>
-    
+  
+<script>
+  // $(".edit").click(function(e){
+  //   $.ajax({
+      
+  //   })
+  // });
+</script>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
