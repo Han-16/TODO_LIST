@@ -209,7 +209,7 @@ app.post('/signup', (req, res) => {
             // alert("이미 있는 ID입니다!");
             res.render("signup.ejs");
         } else{
-            
+             
         }
     });
 });
