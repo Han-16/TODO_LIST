@@ -221,4 +221,4 @@ app.get('/search', (req, res) => {
         if (err) return console.log(err);
         console.log(result);
     });
-});
+}); 
