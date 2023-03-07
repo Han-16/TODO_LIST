@@ -57,7 +57,7 @@
         <% for (var i = 0; i < posts.length; i++) { %>
         <li class="list-group-item">
           <p>number : <%= posts[i]._id %></p>
-          <h4><a href = "http://localhost:8080/detail/<%= posts[i]._id %>">Task : <%= posts[i].task %></a></h4>
+          <h4><a href = "http://localhost:8080/detail/<%= posts[i]._id %>" style="color : black; text-decoration:none;">Task : <%= posts[i].task %></a></h4>
           <p>Date : <%= posts[i].date %></p>
           <button class = "btn btn-daner edit" data-id = "<%= posts[i]._id %>"
             onclick="location.href='http://localhost:8080/edit/<%= posts[i]._id%>'";>

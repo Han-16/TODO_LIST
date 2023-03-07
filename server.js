@@ -204,8 +204,9 @@ app.post('/signup', (req, res) => {
         if (err) return console.log(err);
         if (result) {
             console.log("이미 있는 ID입니다.");            
-            // res.write("<script>alert('hello')</script>");
-            res.render("signup.ejs");
+            res.write("<script>alert('Duplicated ID')</script>");
+            res.end("<script>window.location.href = '/signup'; </script>");
+            
             
         } else{
             console.log(req.body);
@@ -213,9 +214,9 @@ app.post('/signup', (req, res) => {
                 mobile : req.body.mobile, email : req.body.email }, (error, result_2) => {
                     if (error) return console.log(error);
                     console.log("Sign Up Success");
-                    res.render('signin.ejs');
-                    
-                })
+                    res.write("<script>alert('Success!')</script>")
+                    res.end("<script>window.location.href = '/signin'; </script>")
+                });
         }
     });
 });
@@ -233,4 +234,8 @@ app.get('/search', (req, res) => {
     });
 }); 
 
+
+app.get('/fail', (req, res) => {
+   res.render('fail.ejs');
+});
 
