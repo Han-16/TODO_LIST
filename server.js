@@ -30,18 +30,17 @@ MongoClient.connect(process.env.DB_URL, function(err, client){
     });
 
     app.post('/add', (req, res) => {
-        
         db.collection('counter').findOne({name : "게시물 갯수"}, (err, result) => {
             console.log("number of post : ", result.totalPost + 1)
             var total_post = result.totalPost;
-            db.collection('post').insertOne( { _id : total_post + 1, task : req.body.task, date : req.body.date, content : req.body.content}, function(err, result){
-                console.log("Write Done!");
-                db.collection('counter').updateOne({name : '게시물 갯수'}, { $inc : {totalPost : 1} }, (err, result) => {
-                    if (err) return console.log(err);
-                    res.redirect('/list');
+            db.collection('post').insertOne( { _id : total_post + 1, task : req.body.task, date : req.body.date, content : req.body.content}, 
+                function(err, result){
+                    console.log("Write Done!");
+                    db.collection('counter').updateOne({name : '게시물 갯수'}, { $inc : {totalPost : 1} }, (err, result) => {
+                        if (err) return console.log(err);
+                        res.redirect('/list');
                 })
-            });
-        
+            });        
         });
     });
 
@@ -200,20 +199,26 @@ app.get('/signup', (req, res) => {
 
 
 app.post('/signup', (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     db.collection('login').findOne({ id : req.body.id }, (err, result) => {
         if (err) return console.log(err);
         if (result) {
-            console.log("이미 있는 ID입니다.");
-            // console.log(result);
-            // alert("이미 있는 ID입니다!");
+            console.log("이미 있는 ID입니다.");            
+            // res.write("<script>alert('hello')</script>");
             res.render("signup.ejs");
+            
         } else{
-             
+            console.log(req.body);
+             db.collection('login').insertOne({ id : req.body.id, pw : req.body.pw, name : req.body.name, 
+                mobile : req.body.mobile, email : req.body.email }, (error, result_2) => {
+                    if (error) return console.log(error);
+                    console.log("Sign Up Success");
+                    res.render('signin.ejs');
+                    
+                })
         }
     });
 });
-
 
 app.get('/search', (req, res) => {
     console.log(req.query.value);
