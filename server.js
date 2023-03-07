@@ -236,6 +236,7 @@ app.get('/search', (req, res) => {
 
 
 app.get('/fail', (req, res) => {
-   res.render('fail.ejs');
+    res.write("<script>alert('failed')</script>");
+    res.end("<script>window.location.href = '/signin'; </script>")
 });
 
