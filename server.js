@@ -226,18 +226,36 @@ app.post('/signup', (req, res) => {
     });
 });
 
+// app.get('/search', (req, res) => {
+//     console.log(req.query.value);
+//     db.collection('post').find({ task : req.query.value }).toArray((err, result) => {
+//         if (err) return console.log(err);
+//         if (result) {
+//             res.render("search.ejs", { posts : result, search_word : req.query.value });
+//             console.log(result);
+//         } else {
+//             console.log("없는 데이터 요청");
+//         }
+//     });
+// }); 
+
 app.get('/search', (req, res) => {
-    console.log(req.query.value);
-    db.collection('post').find({ task : req.query.value }).toArray((err, result) => {
-        if (err) return console.log(err);
-        if (result) {
-            res.render("search.ejs", { posts : result, search_word : req.query.value });
-            console.log(result);
-        } else {
-            console.log("없는 데이터 요청");
+    var condition = [
+        {
+            $search: {
+                index : "taskSearch",
+                text : {
+                    query : req.query.value,
+                    path : 'task'
+                }
+            }
         }
-    });
-}); 
+    ]
+    db.collection('post').aggregate(condition).toArray((err, result) => {
+            console.log(result);
+            res.render('search.ejs', {posts : result, search_word : req.query.value})
+        })
+});
 
 
 app.get('/fail', (req, res) => {
