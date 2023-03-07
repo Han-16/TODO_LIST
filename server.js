@@ -219,6 +219,13 @@ app.get('/search', (req, res) => {
     console.log(req.query.value);
     db.collection('post').find({ task : req.query.value }).toArray((err, result) => {
         if (err) return console.log(err);
-        console.log(result);
+        if (result) {
+            res.render("search.ejs", { posts : result, search_word : req.query.value });
+            console.log(result);
+        } else {
+            console.log("없는 데이터 요청");
+        }
     });
 }); 
+
+
