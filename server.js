@@ -172,10 +172,15 @@ passport.use(new LocalStrategy({
     db.collection('login').findOne({ id : input_id }, (err, result) => {
         if (err) return done(err);
                             // done(서버에러, 성공 시 사용자 DB 데이터, 에러메세지 넣는 곳)
-        if (!result) return done(null, false, {message : "존재하지 않는 아이디입니다."})
+        if (!result) {
+            console.log("존재하는 아이디가 아니에용");
+            return done(null, false, {message : "존재하지 않는 아이디입니다."})
+        }
         if (input_pw == result.pw){
-            return done(null, result)
+            // console.log(result);
+            return done(null, result);
         } else {
+            console.log("비번 틀린 듯?");
             return done(null, false, {message : "비번 틀린 듯?"})
         }
     })
