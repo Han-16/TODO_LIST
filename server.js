@@ -216,7 +216,7 @@ app.post('/signup', (req, res) => {
         } else{
             console.log(req.body);
              db.collection('login').insertOne({ id : req.body.id, pw : req.body.pw, name : req.body.name, 
-                mobile : req.body.mobile, email : req.body.email }, (error, result_2) => {
+                mobile : req.body.mobile, nickname : req.body.nickname, email : req.body.email }, (error, result_2) => {
                     if (error) return console.log(error);
                     console.log("Sign Up Success");
                     res.write("<script>alert('Success!')</script>")
