@@ -8,7 +8,8 @@ const MongoClient = require('mongodb').MongoClient;
 const methodOverride = require('method-override');
 app.use(methodOverride('_method'));
 require('dotenv').config();
-
+// import crypto from "crypto";
+const crypto = require('crypto');
 
 var db;
 
@@ -18,7 +19,7 @@ MongoClient.connect(process.env.DB_URL, function(err, client){
     db = client.db('scv_todo');
     
     app.listen(8080, function(){
-        console.log("listening on 8080")
+        console.log("listening on 8080");
     })  
 
     app.get('/', (req, res) => {
@@ -168,15 +169,18 @@ passport.use(new LocalStrategy({
     session : true,
     passReqToCallback : false,
 }, (input_id, input_pw, done) => {
-    console.log(input_id, input_pw);
+    
+    console.log(`ID : ${input_id} ₩nPW : ${input_pw}`);
     db.collection('login').findOne({ id : input_id }, (err, result) => {
+        crypto_input_pw = crypto.createHash("sha512").update(input_pw).digest("base64"); 
+        crypto_db_pw = crypto.createHash("sha512").update(result.pw).digest("base64"); 
         if (err) return done(err);
-                            // done(서버에러, 성공 시 사용자 DB 데이터, 에러메세지 넣는 곳)
+                        // done(서버에러, 성공 시 사용자 DB 데이터, 에러메세지 넣는 곳)
         if (!result) {
             console.log("존재하는 아이디가 아니에용");
             return done(null, false, {message : "존재하지 않는 아이디입니다."})
         }
-        if (input_pw == result.pw){
+        if (crypto_input_pw  == crypto_db_pw){
             // console.log(result);
             return done(null, result);
         } else {
@@ -195,7 +199,6 @@ passport.deserializeUser((id, done) => {
     db.collection('login').findOne({ id : id }, (err, result) => {
         done(null, result);
     });
-    
 })
   
 app.get('/signup', (req, res) => {
@@ -214,8 +217,10 @@ app.post('/signup', (req, res) => {
             
             
         } else{
-            console.log(req.body);
-             db.collection('login').insertOne({ id : req.body.id, pw : req.body.pw, name : req.body.name, 
+            let crypto_pw = crypto.createHash("sha512").update(req.body.pw).digest("base64"); 
+            console.log(crypto_pw);
+            // console.log(req.body.pw);
+             db.collection('login').insertOne({ id : req.body.id, pw : crypto_pw, name : req.body.name, 
                 mobile : req.body.mobile, nickname : req.body.nickname, email : req.body.email }, (error, result_2) => {
                     if (error) return console.log(error);
                     console.log("Sign Up Success");
