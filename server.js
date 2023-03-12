@@ -45,8 +45,6 @@ MongoClient.connect(process.env.DB_URL, function(err, client){
         });
     });
 
-
-
     app.get('/list', (req, res) => {
         // db에 저장된 post라는 collection 안에 있는 모든 데이터 꺼내기
         db.collection('post').find().toArray((err, result) => {
@@ -67,7 +65,6 @@ MongoClient.connect(process.env.DB_URL, function(err, client){
             res.status(200).send({ message : "성공했습니다~" });
         });
     });
-     
 
     app.delete('/delete_detail', (req, res) => {
         console.log("글 번호 : ", req.body._id);
@@ -79,8 +76,6 @@ MongoClient.connect(process.env.DB_URL, function(err, client){
         });
         
     })
-
-    
 
     app.get('/detail/:id', function(req, res) {
         db.collection('post').findOne({ _id : parseInt(req.params.id) }, function(err, result) {
@@ -161,7 +156,6 @@ function RUlogin(req, res, next) {
         res.send("로그인 안하셨는데요?")
     }
 }
-
 
 passport.use(new LocalStrategy({
     usernameField : 'id',
