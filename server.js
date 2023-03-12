@@ -169,18 +169,21 @@ passport.use(new LocalStrategy({
     session : true,
     passReqToCallback : false,
 }, (input_id, input_pw, done) => {
-    
-    console.log(`ID : ${input_id} ₩nPW : ${input_pw}`);
+    console.log(`ID : ${input_id}
+PW : ${input_pw}`);
     db.collection('login').findOne({ id : input_id }, (err, result) => {
         crypto_input_pw = crypto.createHash("sha512").update(input_pw).digest("base64"); 
-        crypto_db_pw = crypto.createHash("sha512").update(result.pw).digest("base64"); 
+        
         if (err) return done(err);
                         // done(서버에러, 성공 시 사용자 DB 데이터, 에러메세지 넣는 곳)
+        /**
+         * @TODO : 아이디 존재 여부에 따라 다르게 적용하기
+         */
         if (!result) {
             console.log("존재하는 아이디가 아니에용");
             return done(null, false, {message : "존재하지 않는 아이디입니다."})
         }
-        if (crypto_input_pw  == crypto_db_pw){
+        if (crypto_input_pw  == result.pw){
             // console.log(result);
             return done(null, result);
         } else {
