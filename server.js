@@ -15,9 +15,7 @@ var db;
 
 MongoClient.connect(process.env.DB_URL, function(err, client){
     if (err) return console.log(err);
-
     db = client.db('scv_todo');
-    
     app.listen(8080, function(){
         console.log("listening on 8080");
     })  
@@ -26,7 +24,7 @@ MongoClient.connect(process.env.DB_URL, function(err, client){
         res.sendFile(__dirname + "/index.html")
     });
 
-    app.get('/write', (req, res) => {
+    app.get('/write', RUlogin, (req, res) => {
         res.render('write.ejs');
     });
 
@@ -50,11 +48,18 @@ MongoClient.connect(process.env.DB_URL, function(err, client){
         // db에 저장된 post라는 collection 안에 있는 모든 데이터 꺼내기
         db.collection('post').find().toArray((err, result) => {
             console.log("---------------------------------------------------------------")
-            console.log(result);
+            // console.log(result);
+            var arr = [...result].reverse();
+            console.log(arr);
             console.log("---------------------------------------------------------------")
             res.render('list.ejs', {posts : result});  
         });
     });
+
+    // app.get('/mypage', RUlogin, (req, res) => {
+    //     console.log(req.user);
+    //     res.render('mypage.ejs', {user : req.user});
+    // });
 
 
 
@@ -94,7 +99,6 @@ MongoClient.connect(process.env.DB_URL, function(err, client){
             } else {
                 console.log("없는 데이터 요청");
             }
-
         });
         
     });
@@ -137,7 +141,6 @@ app.post('/signin', passport.authenticate('local', {
 app.get('/mypage', RUlogin, (req, res) => {
     console.log(req.user);
     res.render('mypage.ejs', {user : req.user});
-
 });
 
 function RUlogin(req, res, next) {
@@ -145,7 +148,9 @@ function RUlogin(req, res, next) {
         console.log("req.user : " + req.user);
         next();
     } else {
-        res.send("로그인 안하셨는데요??")
+        // res.send("로그인 안하셨는데요??")
+        res.write("<script>alert('Sign in Plz;')</script>");
+        res.end("<script>window.location.href = '/signin'; </script>");
     }
 }
 
@@ -161,7 +166,7 @@ PW : ${input_pw}`);
         crypto_input_pw = crypto.createHash("sha512").update(input_pw).digest("base64"); 
         
         if (err) return done(err);
-                        // done(서버에러, 성공 시 사용자 DB 데이터, 에러메세지 넣는 곳)
+        // done(서버에러, 성공 시 사용자 DB 데이터, 에러메세지 넣는 곳)
         /**
          * @TODO : 아이디 존재 여부에 따라 다르게 적용하기
          */
@@ -235,18 +240,7 @@ app.delete('/delete', (req, res) => {
         res.status(200).send({ message : "성공했습니다~" });
     });
 });
-// app.get('/search', (req, res) => {
-//     console.log(req.query.value);
-//     db.collection('post').find({ task : req.query.value }).toArray((err, result) => {
-//         if (err) return console.log(err);
-//         if (result) {
-//             res.render("search.ejs", { posts : result, search_word : req.query.value });
-//             console.log(result);
-//         } else {
-//             console.log("없는 데이터 요청");
-//         }
-//     });
-// }); 
+
 
 app.get('/search', (req, res) => {
     var condition = [
@@ -272,3 +266,5 @@ app.get('/fail', (req, res) => {
     res.end("<script>window.location.href = '/signin'; </script>")
 });
 
+
+// app.use('/', require('./routes/shop.js'))
