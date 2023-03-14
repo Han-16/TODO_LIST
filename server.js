@@ -56,16 +56,7 @@ MongoClient.connect(process.env.DB_URL, function(err, client){
         });
     });
 
-    app.delete('/delete', (req, res) => {
-        console.log(req.body);
-        req.body._id = parseInt(req.body._id);
-        // req.body에 담겨온 게시물 번호를 가진 글을 db에서 찾아서 삭제
-        db.collection('post').deleteOne(req.body, (err, result) => {
-            if (err) return console.log(err);
-            console.log("삭제 완료");
-            res.status(200).send({ message : "성공했습니다~" });
-        });
-    });
+
 
     app.delete('/delete_detail', (req, res) => {
         console.log("글 번호 : ", req.body._id);
@@ -229,6 +220,21 @@ app.post('/signup', (req, res) => {
     });
 });
 
+app.delete('/delete', (req, res) => {
+    console.log("삭제 요청 들어옴")
+    console.log(req.body);
+    req.body._id = parseInt(req.body._id);
+    
+    var to_delete = { _id : req.body._id, writer : req.user._id }
+    console.log(to_delete);
+    // req.body에 담겨온 게시물 번호를 가진 글을 db에서 찾아서 삭제
+    db.collection('post').deleteOne(to_delete, (err, result) => {
+        if (err) return console.log(err);
+        console.log("삭제 완료");
+        // if (result) return console.log(result);
+        res.status(200).send({ message : "성공했습니다~" });
+    });
+});
 // app.get('/search', (req, res) => {
 //     console.log(req.query.value);
 //     db.collection('post').find({ task : req.query.value }).toArray((err, result) => {
