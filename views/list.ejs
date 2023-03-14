@@ -56,8 +56,13 @@
       <ul class="list-group">
         <% for (var i = 0; i < posts.length; i++) { %>
         <li class="list-group-item">
-          <p>number : <%= posts[posts.length - 1 - i]._id %></p>
-          <h4><a href = "http://localhost:8080/detail/<%= posts[posts.length - 1 - i]._id %>" style="color : black; text-decoration:none;">Task : <%= posts[posts.length - 1 - i].task %></a></h4>
+          <div style="float:left;">
+            <p>number : <%= posts[posts.length - 1 - i]._id %></p>
+          </div>
+          <div>
+            <p style="float:right">writer : <%= posts[posts.length - 1 - i].nickname %></p>
+          </div>
+          <h4 style="clear:both;"><a href = "http://localhost:8080/detail/<%= posts[posts.length - 1 - i]._id %>" style="color : black; text-decoration:none;">Task : <%= posts[posts.length - 1 - i].task %></a></h4>
           <p>Date : <%= posts[posts.length - 1 - i].date %></p>
           <button class = "btn btn-daner edit" data-id = "<%= posts[posts.length - 1 - i]._id %>"
             onclick="location.href='http://localhost:8080/edit/<%= posts[posts.length - 1 - i]._id%>'";>

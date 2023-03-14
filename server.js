@@ -34,8 +34,9 @@ MongoClient.connect(process.env.DB_URL, function(err, client){
         db.collection('counter').findOne({name : "게시물 갯수"}, (err, result) => {
             console.log("number of post : ", result.totalPost + 1)
             var total_post = result.totalPost;
-            db.collection('post').insertOne( { _id : total_post + 1, task : req.body.task, date : req.body.date, content : req.body.content}, 
-                function(err, result){
+            var post_data = { _id : total_post + 1, task : req.body.task, date : req.body.date, content : req.body.content, writer : req.user._id, 
+                name : req.user.name, nickname : req.user.nickname, }
+            db.collection('post').insertOne( post_data, function(err, result){
                     console.log("Write Done!");
                     db.collection('counter').updateOne({name : '게시물 갯수'}, { $inc : {totalPost : 1} }, (err, result) => {
                         if (err) return console.log(err);
@@ -153,7 +154,7 @@ function RUlogin(req, res, next) {
         console.log("req.user : " + req.user);
         next();
     } else {
-        res.send("로그인 안하셨는데요?")
+        res.send("로그인 안하셨는데요??")
     }
 }
 
