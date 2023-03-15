@@ -208,8 +208,6 @@ app.post('/signup', (req, res) => {
             console.log("이미 있는 ID입니다.");            
             res.write("<script>alert('Duplicated ID')</script>");
             res.end("<script>window.location.href = '/signup'; </script>");
-            
-            
         } else{
             let crypto_pw = crypto.createHash("sha512").update(req.body.pw).digest("base64"); 
             console.log(crypto_pw);
