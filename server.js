@@ -11,6 +11,13 @@ require('dotenv').config();
 // import crypto from "crypto";
 const crypto = require('crypto');
 
+
+/**
+ * @TODO 
+ * 자신의 글만 수정/삭제 버튼 보이게하기
+ * 회원가입 시 유효성 검사 -> ajax?
+ * mypage 제대로 구현하기
+ */
 var db;
 
 MongoClient.connect(process.env.DB_URL, function(err, client){
@@ -262,3 +269,7 @@ app.get('/fail', (req, res) => {
 
 
 // app.use('/', require('./routes/shop.js'))
+
+
+
+////click = `onclick="location.href='http://localhost:8080/edit/<%= posts[posts.length - 1 - i]._id%>'";`
