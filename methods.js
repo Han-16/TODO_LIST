@@ -5,6 +5,7 @@
  *  confirm : 확인창 <br/>
  *  open : 팝업 열기 <br/>
  *  close : 팝업 닫기 <br/>
+ *  아 진짜 너무 하기싫다 살려줘
  */ 
 var action_popup = {
     timer : 500,
@@ -25,6 +26,7 @@ var action_popup = {
         }
     },
 
+    
     alert : function(txt){
         if(txt == null || txt.trim() == ""){
             console.warn("confirm message is empty.");

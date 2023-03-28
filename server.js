@@ -52,7 +52,8 @@ MongoClient.connect(process.env.DB_URL, function(err, client){
             var arr = [...result].reverse();
             console.log(arr);
             console.log("---------------------------------------------------------------")
-            res.render('list.ejs', {posts : result});  
+            // res.render('list.ejs', {posts : result});  
+            res.render("list.ejs", {posts : result});
         });
     });
 
@@ -60,6 +61,7 @@ MongoClient.connect(process.env.DB_URL, function(err, client){
     //     console.log(req.user);
     //     res.render('mypage.ejs', {user : req.user});
     // });
+    
 
 
 
@@ -116,8 +118,6 @@ MongoClient.connect(process.env.DB_URL, function(err, client){
 
 });
 
-
-
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
@@ -136,7 +136,6 @@ app.post('/signin', passport.authenticate('local', {
 }), (req, res) => {
     res.redirect('/');
 });
-
 
 app.get('/mypage', RUlogin, (req, res) => {
     console.log(req.user);
@@ -184,7 +183,6 @@ PW : ${input_pw}`);
     })
 }));
 
-
 passport.serializeUser((user, done) => {
     done(null, user.id); 
 });
@@ -198,7 +196,6 @@ passport.deserializeUser((id, done) => {
 app.get('/signup', (req, res) => {
     res.render('signup.ejs');
 });
-
 
 app.post('/signup', (req, res) => {
     // console.log(req.body);
@@ -257,7 +254,6 @@ app.get('/search', (req, res) => {
             res.render('search.ejs', {posts : result, search_word : req.query.value})
         })
 });
-
 
 app.get('/fail', (req, res) => {
     res.write("<script>alert('failed')</script>");
