@@ -62,7 +62,7 @@ MongoClient.connect(process.env.DB_URL, function(err, client){
     //     res.render('mypage.ejs', {user : req.user});
     // });
     
-
+ 
 
 
     app.delete('/delete_detail', (req, res) => {
